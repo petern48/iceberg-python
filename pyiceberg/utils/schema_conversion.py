@@ -35,6 +35,8 @@ from pyiceberg.types import (
     DoubleType,
     FixedType,
     FloatType,
+    GeometryType,
+    GeographyType,
     IcebergType,
     IntegerType,
     ListType,
@@ -63,6 +65,8 @@ PRIMITIVE_FIELD_TYPE_MAPPING: Dict[str, PrimitiveType] = {
     "long": LongType(),
     "string": StringType(),
     "enum": StringType(),
+    # "geometry": GeometryType(),
+    # "geography": GeographyType(),
     "null": UnknownType(),
 }
 
@@ -624,6 +628,12 @@ class ConvertSchemaToAvro(SchemaVisitorPerPrimitiveType[AvroType]):
 
     def visit_binary(self, binary_type: BinaryType) -> AvroType:
         return "bytes"
+
+    def visit_geometry(self, geometry_type: GeometryType) -> AvroType:
+        return "geometry"  # TODO
+
+    def visit_geography(self, geography_type: GeographyType) -> AvroType:
+        return "geography"  # TODO
 
     def visit_unknown(self, unknown_type: UnknownType) -> AvroType:
         return "null"

@@ -99,6 +99,8 @@ from pyiceberg.types import (
     DoubleType,
     FixedType,
     FloatType,
+    GeometryType,
+    GeographyType,
     IntegerType,
     ListType,
     LongType,
@@ -243,6 +245,8 @@ HIVE_PRIMITIVE_TYPES = {
     UUIDType: "string",
     BinaryType: "binary",
     FixedType: "binary",
+    GeometryType: "binary",
+    GeographyType: "binary",
     UnknownType: "void",
 }
 

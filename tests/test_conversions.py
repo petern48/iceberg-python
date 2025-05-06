@@ -109,6 +109,8 @@ from pyiceberg.types import (
     TimestamptzType,
     TimeType,
     UUIDType,
+    GeometryType,
+    GeographyType,
 )
 
 
@@ -164,6 +166,8 @@ def test_unscaled_to_decimal(unscaled: int, scale: int, expected_result: Decimal
         (DecimalType(5, 2), "123.45", Decimal("123.45")),
         (StringType(), "foo", "foo"),
         (UUIDType(), "f79c3e09-677c-4bbd-a479-3f349cb785e7", uuid.UUID("f79c3e09-677c-4bbd-a479-3f349cb785e7")),
+        # (GeometryType(), "00010111110101111000010000000000", b"\x17\xd7\x84\x00"),
+        # (GeographyType(), "00010111110101111000010000000000", b"\x17\xd7\x84\x00"),
         (FixedType(3), "foo", b"foo"),
         (BinaryType(), "foo", b"foo"),
     ],
@@ -190,6 +194,8 @@ def test_partition_to_py(primitive_type: PrimitiveType, value_str: str, expected
         (TimestamptzType()),
         (TimeType()),
         (UUIDType()),
+        # (GeometryType()),
+        # (GeographyType()),
     ],
 )
 def test_none_partition_values(primitive_type: PrimitiveType) -> None:
@@ -214,6 +220,8 @@ def test_none_partition_values(primitive_type: PrimitiveType) -> None:
         (TimestamptzType()),
         (TimeType()),
         (UUIDType()),
+        # (GeometryType()),
+        # (GeographyType()),
     ],
 )
 def test_hive_default_partition_values(primitive_type: PrimitiveType) -> None:
@@ -282,6 +290,8 @@ def test_partition_to_py_raise_on_incorrect_precision_or_scale(
             b"\xf7\x9c>\tg|K\xbd\xa4y?4\x9c\xb7\x85\xe7",
         ),
         (UUIDType(), b"\xf7\x9c>\tg|K\xbd\xa4y?4\x9c\xb7\x85\xe7", b"\xf7\x9c>\tg|K\xbd\xa4y?4\x9c\xb7\x85\xe7"),
+        # (GeometryType(), b"\x17\xd7\x84\x00", b"\x17\xd7\x84\x00"),
+        # (GeographyType(), b"\x17\xd7\x84\x00", b"\x17\xd7\x84\x00"),
         (FixedType(3), b"foo", b"foo"),
         (BinaryType(), b"foo", b"foo"),
         (DecimalType(5, 2), b"\x30\x39", Decimal("123.45")),
@@ -320,6 +330,8 @@ def test_from_bytes(primitive_type: PrimitiveType, b: bytes, result: Any) -> Non
             b"\xf7\x9c>\tg|K\xbd\xa4y?4\x9c\xb7\x85\xe7",
         ),
         (UUIDType(), b"\xf7\x9c>\tg|K\xbd\xa4y?4\x9c\xb7\x85\xe7", b"\xf7\x9c>\tg|K\xbd\xa4y?4\x9c\xb7\x85\xe7"),
+        # (GeometryType(), b"\x17\xd7\x84\x00", b"\x17\xd7\x84\x00"),
+        # (GeographyType(), b"\x17\xd7\x84\x00", b"\x17\xd7\x84\x00"),
         (FixedType(3), b"foo", b"foo"),
         (BinaryType(), b"foo", b"foo"),
         (DecimalType(5, 2), b"\x30\x39", Decimal("123.45")),

@@ -74,6 +74,8 @@ TEST_PRIMITIVE_TYPES = [
     FixedType(16),
     FixedType(20),
     UUIDType(),
+    GeometryType(),
+    GeographyType(),
 ]
 
 

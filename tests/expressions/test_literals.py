@@ -64,6 +64,8 @@ from pyiceberg.types import (
     TimestamptzType,
     TimeType,
     UUIDType,
+    GeometryType,
+    GeographyType,
 )
 
 
@@ -93,6 +95,8 @@ def test_literal_from_nan_error() -> None:
         StringLiteral,
         FixedLiteral,
         BinaryLiteral,
+        # GeometryLiteral,
+        # GeographyLiteral,
     ],
 )
 def test_literal_classes_with_none_type_error(literal_class: Type[PrimitiveType]) -> None:

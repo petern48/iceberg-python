@@ -35,6 +35,8 @@ from pyiceberg.avro.reader import (
     DoubleReader,
     FixedReader,
     FloatReader,
+    GeometryReader,
+    GeographyReader,
     IntegerReader,
     ListReader,
     MapReader,
@@ -60,6 +62,8 @@ from pyiceberg.avro.writer import (
     DoubleWriter,
     FixedWriter,
     FloatWriter,
+    GeometryWriter,
+    GeographyWriter,
     IntegerWriter,
     ListWriter,
     MapWriter,
@@ -94,6 +98,8 @@ from pyiceberg.types import (
     DoubleType,
     FixedType,
     FloatType,
+    GeometryType,
+    GeographyType,
     IcebergType,
     IntegerType,
     ListType,
@@ -207,6 +213,12 @@ class ConstructWriter(SchemaVisitorPerPrimitiveType[Writer]):
 
     def visit_binary(self, binary_type: BinaryType) -> Writer:
         return BinaryWriter()
+
+    def visit_geometry(self, geometry_type: GeometryType) -> Writer:
+        return GeometryWriter()
+
+    def visit_geography(self, geography_type: GeographyType) -> Writer:
+        return GeographyWriter()
 
     def visit_unknown(self, unknown_type: UnknownType) -> Writer:
         return UnknownWriter()
@@ -365,6 +377,12 @@ class WriteSchemaResolver(PrimitiveWithPartnerVisitor[IcebergType, Writer]):
     def visit_binary(self, binary_type: BinaryType, partner: Optional[IcebergType]) -> Writer:
         return BinaryWriter()
 
+    def visit_geometry(self, geometry_type: GeometryType, partner: Optional[IcebergType]) -> Writer:
+        return GeometryWriter()
+
+    def visit_geography(self, geography_type: GeographyType, partner: Optional[IcebergType]) -> Writer:
+        return GeographyWriter()
+
     def visit_unknown(self, unknown_type: UnknownType, partner: Optional[IcebergType]) -> Writer:
         return UnknownWriter()
 
@@ -503,6 +521,12 @@ class ReadSchemaResolver(PrimitiveWithPartnerVisitor[IcebergType, Reader]):
 
     def visit_binary(self, binary_type: BinaryType, partner: Optional[IcebergType]) -> Reader:
         return BinaryReader()
+
+    def visit_geometry(self, geometry_type: GeometryType, partner: Optional[IcebergType]) -> Reader:
+        return GeometryReader()
+
+    def visit_geography(self, geography_type: GeographyType, partner: Optional[IcebergType]) -> Reader:
+        return GeographyReader()
 
     def visit_unknown(self, unknown_type: UnknownType, partner: Optional[IcebergType]) -> Reader:
         return UnknownReader()

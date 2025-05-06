@@ -157,6 +157,10 @@ class IcebergType(IcebergBaseModel):
                 return BinaryType()
             if v == "unknown":
                 return UnknownType()
+            if v.lower() == "geometry":
+                return GeometryType()
+            if v.lower() == "geography":
+                return GeographyType()
             if v.startswith("fixed"):
                 return FixedType(_parse_fixed_type(v))
             if v.startswith("decimal"):
@@ -865,5 +869,43 @@ class UnknownType(PrimitiveType):
 
     root: Literal["unknown"] = Field(default="unknown")
 
+    def minimum_format_version(self) -> TableVersion:
+        return 3
+
+
+class GeometryType(PrimitiveType):
+    """A Geometry data type in Iceberg can be represented using an instance of this class.
+    
+    Geometry types in Iceberg represent spatial data without a coordinate reference system (CRS).
+    
+    Example:
+        >>> column_foo = GeometryType()
+        >>> isinstance(column_foo, GeometryType)
+        True
+        >>> column_foo
+        GeometryType()
+    """
+    
+    root: Literal["geometry"] = Field(default="geometry")
+    
+    def minimum_format_version(self) -> TableVersion:
+        return 3
+
+
+class GeographyType(PrimitiveType):
+    """A Geography data type in Iceberg can be represented using an instance of this class.
+    
+    Geography types in Iceberg represent spatial data with a geodetic coordinate reference system (CRS).
+    
+    Example:
+        >>> column_foo = GeographyType()
+        >>> isinstance(column_foo, GeographyType)
+        True
+        >>> column_foo
+        GeographyType()
+    """
+    
+    root: Literal["geography"] = Field(default="geography")
+    
     def minimum_format_version(self) -> TableVersion:
         return 3

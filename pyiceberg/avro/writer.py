@@ -126,6 +126,18 @@ class UUIDWriter(Writer):
 
 
 @dataclass(frozen=True)
+class GeometryWriter(Writer):
+    def write(self, encoder: BinaryEncoder, val: Any) -> None:
+        encoder.write_geometry(val)
+
+
+@dataclass(frozen=True)
+class GeographyWriter(Writer):
+    def write(self, encoder: BinaryEncoder, val: Any) -> None:
+        encoder.write_geography(val)
+
+
+@dataclass(frozen=True)
 class UnknownWriter(Writer):
     def write(self, encoder: BinaryEncoder, val: Any) -> None:
         encoder.write_unknown(val)

@@ -922,6 +922,8 @@ EXAMPLE_TABLE_METADATA_V3 = {
                 {"id": 4, "name": "u", "required": True, "type": "unknown"},
                 {"id": 5, "name": "ns", "required": True, "type": "timestamp_ns"},
                 {"id": 6, "name": "nstz", "required": True, "type": "timestamptz_ns"},
+                {"id": 7, "name": "geometry", "required": True, "type": "geometry"},  # TODO: not sure.
+                {"id": 8, "name": "geography", "required": True, "type": "geography"},
             ],
         },
     ],

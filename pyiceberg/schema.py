@@ -48,6 +48,8 @@ from pyiceberg.types import (
     DoubleType,
     FixedType,
     FloatType,
+    GeographyType,
+    GeometryType,
     IcebergType,
     IntegerType,
     ListType,
@@ -553,6 +555,10 @@ class PrimitiveWithPartnerVisitor(SchemaWithPartnerVisitor[P, T]):
             return self.visit_fixed(primitive, primitive_partner)
         elif isinstance(primitive, BinaryType):
             return self.visit_binary(primitive, primitive_partner)
+        elif isinstance(primitive, GeometryType):
+            return self.visit_geometry(primitive, primitive_partner)
+        elif isinstance(primitive, GeographyType):
+            return self.visit_geography(primitive, primitive_partner)
         elif isinstance(primitive, UnknownType):
             return self.visit_unknown(primitive, primitive_partner)
         else:
@@ -621,6 +627,14 @@ class PrimitiveWithPartnerVisitor(SchemaWithPartnerVisitor[P, T]):
     @abstractmethod
     def visit_binary(self, binary_type: BinaryType, partner: Optional[P]) -> T:
         """Visit a BinaryType."""
+
+    @abstractmethod
+    def visit_geometry(self, geometry_type: GeometryType, partner: Optional[P]) -> T:
+        """Visit a GeometryType."""
+
+    @abstractmethod
+    def visit_geography(self, geography_type: GeographyType, partner: Optional[P]) -> T:
+        """Visit a GeographyType."""
 
     @abstractmethod
     def visit_unknown(self, unknown_type: UnknownType, partner: Optional[P]) -> T:
@@ -747,6 +761,10 @@ class SchemaVisitorPerPrimitiveType(SchemaVisitor[T], ABC):
             return self.visit_uuid(primitive)
         elif isinstance(primitive, BinaryType):
             return self.visit_binary(primitive)
+        elif isinstance(primitive, GeometryType):
+            return self.visit_geometry(primitive)
+        elif isinstance(primitive, GeographyType):
+            return self.visit_geography(primitive)
         elif isinstance(primitive, UnknownType):
             return self.visit_unknown(primitive)
         else:
@@ -815,6 +833,14 @@ class SchemaVisitorPerPrimitiveType(SchemaVisitor[T], ABC):
     @abstractmethod
     def visit_binary(self, binary_type: BinaryType) -> T:
         """Visit a BinaryType."""
+
+    @abstractmethod
+    def visit_geometry(self, geometry_type: GeometryType) -> T:
+        """Visit a GeometryType."""
+
+    @abstractmethod
+    def visit_geography(self, geography_type: GeographyType) -> T:
+        """Visit a GeographyType."""
 
     @abstractmethod
     def visit_unknown(self, unknown_type: UnknownType) -> T:

@@ -76,5 +76,19 @@ class BinaryEncoder:
             raise ValueError(f"Expected UUID to have 16 bytes, got: len({uuid.bytes!r})")
         return self.write(uuid.bytes)
 
+    def write_geometry(self, geometry: bytes) -> None:
+        """Write geometry as a fixed[16].  TODO: Check if this is correct.
+
+        The geometry logical type represents a geometry value.
+        """
+        self.write(geometry)
+
+    def write_geography(self, geography: bytes) -> None:
+        """Write geography as a fixed[16].
+
+        The geography logical type represents a geography value.
+        """
+        self.write(geography)
+
     def write_unknown(self, _: Any) -> None:
         """Nulls are written as 0 bytes in avro, so we do nothing."""

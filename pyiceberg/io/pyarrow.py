@@ -155,6 +155,8 @@ from pyiceberg.types import (
     DoubleType,
     FixedType,
     FloatType,
+    GeometryType,
+    GeographyType,
     IcebergType,
     IntegerType,
     ListType,
@@ -679,6 +681,13 @@ class _ConvertToArrowSchema(SchemaVisitorPerPrimitiveType[pa.DataType]):
 
     def visit_uuid(self, _: UUIDType) -> pa.DataType:
         return pa.binary(16)
+
+    def visit_geometry(self, _: GeometryType) -> pa.DataType:
+        # return pa.large_binary()  # TODO
+        return pa.geometry()
+
+    def visit_geography(self, _: GeographyType) -> pa.DataType:
+        return pa.geography()  # TODO
 
     def visit_unknown(self, _: UnknownType) -> pa.DataType:
         return pa.null()
@@ -1239,6 +1248,10 @@ class _ConvertToIceberg(PyArrowSchemaVisitor[Union[IcebergType, Schema]]):
             elif primitive.tz is None:
                 return TimestampType()
 
+        elif pa.types.is_geometry(primitive):
+            return GeometryType()
+        elif pa.types.is_geography(primitive):
+            return GeographyType()
         elif pa.types.is_binary(primitive) or pa.types.is_large_binary(primitive) or pa.types.is_binary_view(primitive):
             return BinaryType()
         elif pa.types.is_fixed_size_binary(primitive):
@@ -1931,6 +1944,12 @@ class PrimitiveToPhysicalType(SchemaVisitorPerPrimitiveType[str]):
 
     def visit_uuid(self, uuid_type: UUIDType) -> str:
         return "FIXED_LEN_BYTE_ARRAY"
+
+    def visit_geometry(self, geometry_type: GeometryType) -> str:
+        return "GEOMETRY"
+
+    def visit_geography(self, geography_type: GeographyType) -> str:
+        return "GEOGRAPHY"
 
     def visit_binary(self, binary_type: BinaryType) -> str:
         return "BYTE_ARRAY"

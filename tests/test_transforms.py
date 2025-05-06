@@ -111,6 +111,8 @@ from pyiceberg.types import (
     TimeType,
     UnknownType,
     UUIDType,
+    # GeometryType,
+    # GeographyType,
 )
 from pyiceberg.utils.datetime import (
     date_str_to_days,
@@ -147,6 +149,8 @@ from pyiceberg.utils.datetime import (
         ("iceberg", StringType(), 1210000089),
         (UUID("f79c3e09-677c-4bbd-a479-3f349cb785e7"), UUIDType(), 1488055340),
         (b"\xf7\x9c>\tg|K\xbd\xa4y?4\x9c\xb7\x85\xe7", UUIDType(), 1488055340),
+        # (b"\x00\x01\x02\x03", GeometryType(), -188683207),
+        # (b"\x00\x01\x02\x03", GeographyType(), -188683207),  # TODO CHECK THIS
         (
             timestamp_to_nanos("2017-11-16T22:31:08.000001"),
             TimestampNanoType(),

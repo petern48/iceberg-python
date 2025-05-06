@@ -29,6 +29,8 @@ Note:
     implementations that share the same conversion logic, registrations can be stacked.
 """
 
+from __future__ import annotations
+import base64
 import codecs
 import uuid
 from datetime import date, datetime, time
@@ -51,6 +53,8 @@ from pyiceberg.types import (
     DoubleType,
     FixedType,
     FloatType,
+    GeographyType,
+    GeometryType,
     IntegerType,
     LongType,
     PrimitiveType,
@@ -176,6 +180,18 @@ def _(_: PrimitiveType, value_str: str) -> bytes:
 @handle_none
 def _(_: DecimalType, value_str: str) -> Decimal:
     return Decimal(value_str)
+
+
+@partition_to_py.register(GeometryType)
+@handle_none
+def _(_: GeometryType, value_str: str) -> bytes:
+    return bytes(value_str, UTF8)
+
+
+@partition_to_py.register(GeographyType)
+@handle_none
+def _(_: GeographyType, value_str: str) -> bytes:
+    return bytes(value_str, UTF8)
 
 
 @partition_to_py.register(UnknownType)
@@ -364,6 +380,16 @@ def _(_: PrimitiveType, b: bytes) -> bytes:
 def _(primitive_type: DecimalType, buf: bytes) -> Decimal:
     unscaled = int.from_bytes(buf, "big", signed=True)
     return unscaled_to_decimal(unscaled, primitive_type.scale)
+
+
+@from_bytes.register(GeometryType)
+def _(_: GeometryType, value: bytes) -> bytes:
+    return value  # TODO: implement
+
+
+@from_bytes.register(GeographyType)
+def _(_: GeographyType, value: bytes) -> bytes:
+    return value  # TODO: implement
 
 
 @from_bytes.register(UnknownType)

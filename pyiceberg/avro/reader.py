@@ -218,6 +218,20 @@ class UUIDReader(Reader):
     def skip(self, decoder: BinaryDecoder) -> None:
         decoder.skip(16)
 
+class GeometryReader(Reader):
+    def read(self, decoder: BinaryDecoder) -> bytes:
+        return decoder.read_geometry()  # TODO
+
+    def skip(self, decoder: BinaryDecoder) -> None:
+        decoder.skip_geometry()  # TODO
+
+class GeographyReader(Reader):
+    def read(self, decoder: BinaryDecoder) -> bytes:
+        return decoder.read_geography()  # TODO
+
+    def skip(self, decoder: BinaryDecoder) -> None:
+        decoder.skip_geography()  # TODO or maybe skip(16?)
+
 
 class UnknownReader(Reader):
     def read(self, decoder: BinaryDecoder) -> None:

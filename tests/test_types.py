@@ -30,6 +30,8 @@ from pyiceberg.types import (
     DoubleType,
     FixedType,
     FloatType,
+    GeometryType,
+    GeographyType,
     IcebergType,
     IntegerType,
     ListType,
@@ -60,6 +62,8 @@ non_parameterized_types = [
     (10, StringType),
     (11, UUIDType),
     (12, BinaryType),
+    (13, GeometryType),
+    (14, GeographyType),
 ]
 
 primitive_types = {
@@ -75,6 +79,8 @@ primitive_types = {
     "string": StringType,
     "uuid": UUIDType,
     "binary": BinaryType,
+    "geometry": GeometryType,
+    "geography": GeographyType,
 }
 
 
@@ -101,6 +107,8 @@ def test_repr_primitive_types(input_index: int, input_type: Type[PrimitiveType])
         (BinaryType(), True),
         (DecimalType(32, 3), True),
         (FixedType(8), True),
+        (GeometryType(), True),
+        (GeographyType(), True),
         (ListType(1, StringType(), True), False),
         (
             MapType(1, StringType(), 2, IntegerType(), False),
@@ -456,6 +464,38 @@ def test_str_uuid() -> None:
 
 def test_repr_uuid() -> None:
     assert repr(UUIDType()) == "UUIDType()"
+
+
+def test_serialization_geometry() -> None:
+    assert GeometryType().model_dump_json() == '"geometry"'
+
+
+def test_deserialization_geometry() -> None:
+    assert GeometryType.model_validate_json('"geometry"') == GeometryType()
+
+
+def test_str_geometry() -> None:
+    assert str(GeometryType()) == "geometry"
+
+
+def test_repr_geometry() -> None:
+    assert repr(GeometryType()) == "GeometryType()"
+
+
+def test_serialization_geography() -> None:
+    assert GeographyType().model_dump_json() == '"geography"'
+
+
+def test_deserialization_geography() -> None:
+    assert GeographyType.model_validate_json('"geography"') == GeographyType()
+
+
+def test_str_geography() -> None:
+    assert str(GeographyType()) == "geography"
+
+
+def test_repr_geometry() -> None:
+    assert repr(GeometryType()) == "GeometryType()"
 
 
 def test_serialization_fixed() -> None:

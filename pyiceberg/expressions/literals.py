@@ -47,6 +47,8 @@ from pyiceberg.types import (
     TimestamptzType,
     TimeType,
     UUIDType,
+    GeometryType,
+    GeographyType,
 )
 from pyiceberg.utils.datetime import (
     date_str_to_days,
@@ -145,6 +147,7 @@ def literal(value: L) -> Literal[L]:
         return StringLiteral(value)
     elif isinstance(value, UUID):
         return UUIDLiteral(value.bytes)  # type: ignore
+    # elif isinstance(value, )  # TODO: Add GeometryLiteral and GeographyLiteral
     elif isinstance(value, bytes):
         return BinaryLiteral(value)
     elif isinstance(value, Decimal):
@@ -716,4 +719,35 @@ class BinaryLiteral(Literal[bytes]):
         else:
             raise TypeError(
                 f"Cannot convert BinaryLiteral into {type_var}, different length: {UUID_BYTES_LENGTH} <> {len(self.value)}"
+            )
+
+
+class GeometryLiteral(Literal[bytes]):
+    def __init__(self, value: bytes) -> None:
+        super().__init__(value, bytes)
+
+    @singledispatchmethod
+    def to(self, type_var: IcebergType) -> Literal:  # type: ignore
+        raise TypeError(f"Cannot convert GeometryLiteral into {type_var}")
+
+    @to.register(GeometryType)
+    def _(self, _: GeometryType) -> Literal[bytes]:
+        return self
+
+    @to.register(FixedType)
+    def _(self, type_var: FixedType) -> Literal[bytes]:
+        if len(type_var) == len(self.value):
+            return FixedLiteral(self.value)
+        else:
+            raise TypeError(
+                f"Cannot convert GeometryType into {type_var}, different length: {len(type_var)} <> {len(self.value)}"
+            )
+
+    @to.register(UUIDType)
+    def _(self, type_var: UUIDType) -> Literal[bytes]:
+        if len(self.value) == UUID_BYTES_LENGTH:
+            return UUIDLiteral(self.value)
+        else:
+            raise TypeError(
+                f"Cannot convert GeometryType into {type_var}, different length: {UUID_BYTES_LENGTH} <> {len(self.value)}"
             )
